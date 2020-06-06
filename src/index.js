@@ -1,10 +1,26 @@
 const { Telegraf } = require('telegraf');
+
 require('dotenv-safe').config();
+
+const handlers = require('./handlers');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-bot.start((ctx) => ctx.reply('Welcome'));
-bot.help((ctx) => ctx.reply('Send me a sticker'));
-bot.on('sticker', (ctx) => ctx.reply('👍'));
-bot.hears('hi', (ctx) => ctx.reply('Hey there'));
-bot.launch();
+async function setHandlers() {
+  bot.start(handlers.start);
+  bot.help(handlers.help);
+
+  bot.catch(async (err, ctx) => {
+    console.error(
+      `An error from @${ctx.from.username} (query: ${ctx.message.text})`,
+      err,
+    );
+    await ctx.reply(
+      "Упс, щось пішло не так, я зламався 😭. Будь ласка, звернись до IT Coordinator'а.",
+    );
+  });
+}
+
+setHandlers()
+  .then(() => bot.launch())
+  .catch(console.error);
