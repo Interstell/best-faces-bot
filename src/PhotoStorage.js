@@ -27,7 +27,7 @@ class PhotoStorage {
     return member ? member.faces : [];
   }
 
-  isPresentOnPhotos(telegram) {
+  hasAccessToPhotos(telegram) {
     return !!this.getMemberByTelegram(telegram);
   }
 }

@@ -3,13 +3,15 @@ const { Telegraf } = require('telegraf');
 require('dotenv-safe').config();
 
 const handlers = require('./handlers');
+const middlewares = require('./middlewares');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 async function setHandlers() {
+  bot.use(middlewares.access);
+
   bot.start(handlers.start);
   bot.help(handlers.help);
-
   bot.command('me', (ctx) => handlers.photo.command(ctx, ctx.from.username));
   bot.hears(/^@/, (ctx) => handlers.photo.command(ctx, ctx.match.input));
 
