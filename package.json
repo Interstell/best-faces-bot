@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Interstell/best-faces-bot#readme",
   "dependencies": {
     "dotenv-safe": "^8.2.0",
+    "moment": "^2.26.0",
     "telegraf": "^3.38.0"
   },
   "devDependencies": {
