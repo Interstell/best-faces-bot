@@ -68,6 +68,8 @@ module.exports.action = async function (ctx) {
     return module.exports.action(ctx);
   }
 
+  await ctx.answerCbQuery();
+
   // instead of sending new message, we edit the existing photo
   await ctx.editMessageMedia({
     type: 'photo',
