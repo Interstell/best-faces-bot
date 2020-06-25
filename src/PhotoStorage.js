@@ -28,10 +28,13 @@ class PhotoStorage {
   }
 
   hasAccessToPhotos(telegram) {
+    // user has access to the bot only if we have his Telegram username
+    // is present in best-flickr-members.json file
     return !!this.getMemberByTelegram(telegram);
   }
 }
 
+// creating a singleton PhotoStorage instance
 const photoStorage = new PhotoStorage();
 
 module.exports = photoStorage;
