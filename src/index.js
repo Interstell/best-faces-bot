@@ -1,12 +1,18 @@
 const { Telegraf } = require('telegraf');
 
+const isHeroku = !!process.env.HEROKU;
+
 // loading .env file content
-require('dotenv-safe').config();
+if (!isHeroku) {
+  require('dotenv-safe').config();
+}
 
 const handlers = require('./handlers');
 const middlewares = require('./middlewares');
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
+const PORT = process.env.PORT || 7000;
+const URL = process.env.HEROKU_URL;
 
 // creating bot instance using BOT_TOKEN from .env file
 const bot = new Telegraf(BOT_TOKEN);
@@ -39,5 +45,12 @@ async function setHandlers() {
 
 // adding handlers to the `bot` instance and launching the bot
 setHandlers()
-  .then(() => bot.launch())
+  .then(() => {
+    if (isHeroku) {
+      bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
+      bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
+    } else {
+      bot.launch();
+    }
+  })
   .catch(console.error);
